@@ -1,7 +1,7 @@
 package de.hpi.isg.evaluation
 
-import de.hpi.isg.elements.Line
-import de.hpi.isg.pojo.{AnnotationPojo, SpreadSheetPojo}
+import de.hpi.isg.elements.LineMetadata
+import de.hpi.isg.pojo.SpreadSheetPojo
 
 import scala.collection.JavaConverters._
 
@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
   */
 object ResultEvaluation {
 
-  def loadGroundTruth(filePath: String): Array[Line] = {
+  def loadGroundTruth(filePath: String): Array[LineMetadata] = {
     val jsonReader = new JsonReader
     val resultPojo = jsonReader.read(filePath)
 
@@ -23,7 +23,7 @@ object ResultEvaluation {
                               .zip(Stream.continually(spreadSheetPojo.getSpreadsheetName))
                             .zip(getBoundaryGroundtruth(spreadSheetPojo))
                     )
-                    .map(flattened => new Line(flattened._1._1, flattened._1._2, flattened._2._1, flattened._2._2))
+                    .map(flattened => new LineMetadata(flattened._1._1, flattened._1._2, flattened._2._1, flattened._2._2))
                     .toArray
     result
   }

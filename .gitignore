@@ -14,3 +14,9 @@ buildNumber.properties
 # intellij
 .idea/
 *.iml
+
+# dataset
+src/main/resources
+
+# output
+*.csv

@@ -6,9 +6,9 @@ import de.hpi.isg.pojo.SpreadSheetPojo
 import scala.collection.JavaConverters._
 
 /**
-  * @author Lan Jiang
-  * @since 2019-07-15
-  */
+ * @author Lan Jiang
+ * @since 2019-07-15
+ */
 object ResultEvaluation {
 
   def loadGroundTruth(filePath: String): Array[LineMetadata] = {
@@ -18,13 +18,14 @@ object ResultEvaluation {
     val spreadSheetPojos = resultPojo.getSpreadSheetPojos
 
     val result = spreadSheetPojos.asScala.toStream
-                    .flatMap(spreadSheetPojo =>
-                      Stream.continually(spreadSheetPojo.getExcelFileName)
-                              .zip(Stream.continually(spreadSheetPojo.getSpreadsheetName))
-                            .zip(getBoundaryGroundtruth(spreadSheetPojo))
-                    )
-                    .map(flattened => new LineMetadata(flattened._1._1, flattened._1._2, flattened._2._1, flattened._2._2))
-                    .toArray
+            .filter(sheetPojo => sheetPojo.getIsMultitableFile.equals("false"))
+            .flatMap(spreadSheetPojo =>
+              Stream.continually(spreadSheetPojo.getExcelFileName)
+                      .zip(Stream.continually(spreadSheetPojo.getSpreadsheetName))
+                      .zip(getBoundaryGroundtruth(spreadSheetPojo))
+            )
+            .map(flattened => LineMetadata(flattened._1._1, flattened._1._2, flattened._2._1, flattened._2._2))
+            .toArray
     result
   }
 

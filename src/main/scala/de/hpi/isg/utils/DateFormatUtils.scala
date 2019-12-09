@@ -8,7 +8,8 @@ import scala.util.{Failure, Success, Try}
  * @author Lan Jiang
  * @since 11/13/19
  */
-class DateFormatUtils {
+object DateFormatUtils {
+  private val DATE_PATTERNS = Array("dd/MM/yyyy", "yyyy/MM/dd", "dd.MM.yyyy", "yyyy.MM.dd", "dd-MM-yyyy", "yyyy-MM-dd")
 
   def toDate(value: String): Boolean = {
     val result = DateFormatUtils.DATE_PATTERNS.map(pattern => {
@@ -20,10 +21,5 @@ class DateFormatUtils {
     })
     result.contains(true)
   }
-}
-
-object DateFormatUtils {
-
-  private val DATE_PATTERNS = Array("dd/MM/yyyy", "yyyy/MM/dd", "dd.MM.yyyy", "yyyy.MM.dd", "dd-MM-yyyy", "yyyy-MM-dd")
 }
 

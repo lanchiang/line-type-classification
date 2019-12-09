@@ -72,4 +72,33 @@ object MathFunctions {
     }
     entropy
   }
+
+  /**
+   * Calculate the discounted cumulative gain of the list of the values. the graded relevance equals to 1
+   * if the cell is empty, 0 if not.
+   * @param seq
+   * @return
+   */
+  def normalizedDiscountedCumulativeGain(seq: Array[Double]): Double = {
+    val dcg = discountedCumulativeGain(seq)
+    val idealSeq = seq.sorted(Ordering.Double.reverse)
+    val idcg = discountedCumulativeGain(idealSeq)
+    if (idcg == 0) {
+      0d
+    } else {
+      dcg / idcg
+    }
+  }
+
+  def discountedCumulativeGain(seq: Array[Double]): Double = {
+    val indexedSeq = seq.zipWithIndex.map(pair => (pair._1, pair._2 + 1))
+    indexedSeq.map(pair => {
+      if (pair._2 == 1) {
+        pair._1
+      } else {
+        val partialDCG = pair._1 / (Math.log(pair._2.toDouble) / Math.log(2.0))
+        partialDCG
+      }
+    }).sum
+  }
 }

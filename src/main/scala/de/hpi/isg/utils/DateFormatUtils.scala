@@ -11,7 +11,7 @@ import scala.util.{Failure, Success, Try}
 object DateFormatUtils {
   private val DATE_PATTERNS = Array("dd/MM/yyyy", "yyyy/MM/dd", "dd.MM.yyyy", "yyyy.MM.dd", "dd-MM-yyyy", "yyyy-MM-dd")
 
-  def toDate(value: String): Boolean = {
+  def isDate(value: String): Boolean = {
     val result = DateFormatUtils.DATE_PATTERNS.map(pattern => {
       val fmt = DateTimeFormat forPattern(pattern)
       Try(fmt parseDateTime(value)) match {

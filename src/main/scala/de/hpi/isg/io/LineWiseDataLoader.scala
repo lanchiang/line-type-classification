@@ -16,12 +16,16 @@ class LineWiseDataLoader(override val inputDataFolderPath: String, override val 
         extends DataLoader(inputDataFolderPath, labelFilePath) {
 
   override def loadData(): Array[Line] = {
+//    val dataReader = new DataReader(inputDataFolderPath)
     val dataReader = new DataReader(inputDataFolderPath)
     val inputData = dataReader.read()
 
     // read ground truth
     val csvParser = new CSVParserBuilder().withQuoteChar('\"').withSeparator(',').build()
-    val csvReader = new CSVReaderBuilder(new FileReader(labelFilePath)).withSkipLines(1).withCSVParser(csvParser).build()
+//    val csvReader = new CSVReaderBuilder(new FileReader(labelFilePath)).withSkipLines(1).withCSVParser(csvParser).build()
+//    val csvReader = new CSVReaderBuilder(new FileReader(labelFilePath)).withCSVParser(csvParser).build()
+    val csvReader = new CSVReaderBuilder(new FileReader(labelFilePath)).withCSVParser(csvParser).withSkipLines(1).build()
+
     val labels = csvReader.readAll().asScala.map(line => {
       val excelFileName = line(0)
       val spreadsheetName = line(1)
@@ -34,7 +38,6 @@ class LineWiseDataLoader(override val inputDataFolderPath: String, override val 
       val annotation = line(3)
       LineMetadata(excelFileName, spreadsheetName, lineNumber, annotation)
     }).toArray
-
     val lines = super.constructLines(inputData, labels)
     lines
   }

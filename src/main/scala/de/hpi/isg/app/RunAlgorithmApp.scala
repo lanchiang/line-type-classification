@@ -11,13 +11,10 @@ import de.hpi.isg.io.{DataLoader, DataReader, JsonDataLoader, LineWiseDataLoader
  * @author Lan Jiang
  * @since 11/12/19
  */
-class RunAlgorithmApp(val inputDataFolderPath: String, val labelFilePath: String, val delimiter: Char = ',', val quote: Char = '\"') {
+class RunAlgorithmApp(val inputDataFolderPath: String, val labelFilePath: String = "", val delimiter: Char = ',', val quote: Char = '\"') {
 
   def run(): Unit = {
-//        val dataLoader: DataLoader = new JsonDataLoader(inputDataFolderPath, labelFilePath)
-    val dataLoader: DataLoader = new LineWiseDataLoader(inputDataFolderPath, labelFilePath)
-    val lines = preprocessing(dataLoader.loadData())
-
+    val lines = createLines()
     val f = new LineClassificationFeatures
 
     val features = f.createFeatureVector(lines)
@@ -51,26 +48,41 @@ class RunAlgorithmApp(val inputDataFolderPath: String, val labelFilePath: String
   def preprocessing(lines: Array[Line]): Array[Line] = {
     val linesBySheet = lines.groupBy(line => (line.lineMetadata.excelFileName, line.lineMetadata.spreadsheetName))
 
+    val dataLabelName = "data"
+//    val dataLabelName = "Data"
+//    val dataLabelName = "Data (D)"
     // remove the files that contain no data lines.
     val result = linesBySheet.values
-            .filter(lines => {
-              if (lines.map(line => line.lineMetadata.lineType).count(lineType => lineType.equals("Data (D)")) == 0) {
-                false
-              } else true
-            })
+//            .filter(lines => {
+//              if (lines.map(line => line.lineMetadata.lineType).count(lineType => lineType.equals(dataLabelName)) == 0) {
+//                false
+//              } else true
+//            })
             .flatten.toArray
     result
+  }
+
+  def createLines(): Array[Line] = {
+//    val dataLoader: DataLoader = new JsonDataLoader(inputDataFolderPath, labelFilePath)
+    val dataLoader: DataLoader = new LineWiseDataLoader(inputDataFolderPath, labelFilePath)
+    val lines = preprocessing(dataLoader.loadData())
+    lines
   }
 }
 
 object RunAlgorithmApp {
 
   def main(args: Array[String]): Unit = {
-//        val inputDataFolderPath = getClass.getResource("/excel-csv-files").toURI.getPath
-//        val labelFilePath = getClass.getClassLoader.getResource("annotation_result.json").toURI.getPath
+//    val inputDataFolderPath = getClass.getResource("/excel-csv-files").toURI.getPath
+//    val labelFilePath = getClass.getClassLoader.getResource("annotation_result.json").toURI.getPath
 
-    val inputDataFolderPath = getClass.getResource("/selection240").toURI.getPath
-    val labelFilePath = getClass.getClassLoader.getResource("annotation_result_line.csv").toURI.getPath
+//    val inputDataFolderPath = getClass.getResource("/data340").toURI.getPath
+//    val labelFilePath = getClass.getClassLoader.getResource("annotation_result.csv").toURI.getPath
+
+    val dataset_name = "troy"
+
+    val inputDataFolderPath = getClass.getResource("/new_annotations/" + dataset_name).toURI.getPath
+    val labelFilePath = getClass.getResource("/new_annotations/annotations_" + dataset_name + ".csv").toURI.getPath
     val app = new RunAlgorithmApp(inputDataFolderPath, labelFilePath)
     app.run()
   }

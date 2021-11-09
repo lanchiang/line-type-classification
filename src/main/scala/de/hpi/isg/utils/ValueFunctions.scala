@@ -11,13 +11,13 @@ import scala.util.Try
 object ValueFunctions {
 
   def detectDataType(value: String): DataType = {
-    if (Try(value.toDouble).isSuccess) {
-      DataType.Float
+    if (Try(value.toInt).isSuccess) {
+      DataType.Int
     } else {
-      if (Try(value.toInt).isSuccess) {
-        DataType.Int
+      if (Try(value.toDouble).isSuccess) {
+        DataType.Float
       } else {
-        if (DateFormatUtils.toDate(value)) {
+        if (DateFormatUtils.isDate(value)) {
           DataType.Date
         } else {
           if (value.length == 0) {

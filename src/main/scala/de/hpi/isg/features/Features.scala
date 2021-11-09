@@ -8,5 +8,5 @@ import de.hpi.isg.elements.Line
  */
 abstract class Features {
 
-  abstract def createFeatureVector(inputData: Array[Line]): Array[(Line, String, Double)]
+  def createFeatureVector(inputData: Array[Line]): Array[(Line, String, Double)]
 }

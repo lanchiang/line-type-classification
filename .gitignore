@@ -20,3 +20,14 @@ src/main/resources
 
 # output
 *.csv
+
+# project configurations files
+.idea
+
+# mac DS_Store.
+.DS_Store
+**/.DS_Store
+
+# temparory folders
+**/temp
+debug/

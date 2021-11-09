@@ -28,8 +28,8 @@ object MathFunctions {
     * @tparam T data type of the sequence, must be numerical
     * @return the variance
     */
-  def std[T](seq: Seq[T]): Float = {
-    Math.sqrt(variance(seq)).toFloat
+  def std[T](seq: Seq[Any]): Double = {
+    Math.sqrt(variance(seq))
   }
 
   def average[T](seq: Seq[T]): Float = {
